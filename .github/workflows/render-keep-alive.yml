@@ -1,0 +1,41 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Runs every 14 minutes (Render free tier sleeps after ~15 minutes of inactivity)
+    - cron: "*/14 * * * *"
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    name: Ping Render Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Send Keep-Alive Request
+        env:
+          BACKEND_URL: ${{ secrets.RENDER_BACKEND_URL }}
+        run: |
+          if [ -z "$BACKEND_URL" ]; then
+            echo "::error::Secret RENDER_BACKEND_URL is not set in repository secrets."
+            exit 1
+          fi
+
+          # Strip trailing slash if present
+          CLEAN_URL="${BACKEND_URL%/}"
+          HEALTH_URL="${CLEAN_URL}/health"
+
+          echo "Sending keep-alive health check to backend..."
+          
+          # Send GET request with a 30-second timeout, failing on HTTP 4xx/5xx
+          HTTP_STATUS=$(curl --silent --show-error --fail --max-time 30 \
+            --write-out "%{http_code}" --output /dev/null \
+            "$HEALTH_URL")
+
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Render backend is active and reachable (HTTP $HTTP_STATUS)."
+          else
+            echo "::error::Received unexpected HTTP status: $HTTP_STATUS"
+            exit 1
+          fi
