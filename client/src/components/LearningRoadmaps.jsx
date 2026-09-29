@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Compass, Sparkles, CheckCircle2, Clock, ArrowRight, BookOpen,
-  TrendingUp, Award, Layers, RefreshCw, Trash2, Plus, X, Globe, Hash
+  TrendingUp, Award, Layers, RefreshCw, Trash2, Plus, X, Globe, Hash, Menu
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_URL as API } from '../config';
@@ -119,25 +119,34 @@ const LearningRoadmaps = ({ user, onOpenSidebar, onSelectRoom }) => {
     <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Top Header */}
       <div
-        className="p-5 md:p-6 border-b flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="p-3 sm:p-5 md:p-6 border-b flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
         style={{
           background: 'rgba(15, 15, 26, 0.85)',
           backdropFilter: 'blur(20px)',
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          {onOpenSidebar && (
+            <button
+              onClick={onOpenSidebar}
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white flex-shrink-0"
+              title="Open Navigation"
+            >
+              <Menu size={20} />
+            </button>
+          )}
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 flex-shrink-0"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <Compass size={18} />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-white flex items-center gap-2">
-              AI Personalized Learning Roadmaps
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-xl font-bold text-white flex items-center gap-2 truncate">
+              AI Learning Roadmaps
             </h1>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 hidden sm:block">
               Custom step-by-step masteries generated dynamically from your chats & skill goals.
             </p>
           </div>
@@ -145,11 +154,11 @@ const LearningRoadmaps = ({ user, onOpenSidebar, onSelectRoom }) => {
 
         <button
           onClick={() => setShowGenerateModal(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex-shrink-0"
+          className="flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 flex-shrink-0"
           style={{ background: 'var(--gradient-brand)' }}
         >
           <Sparkles size={14} />
-          Generate New Roadmap
+          <span>Generate New Roadmap</span>
         </button>
       </div>
 

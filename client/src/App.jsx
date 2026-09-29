@@ -549,7 +549,7 @@ function App() {
   const canRegenerate = messages.length >= 2 && messages[messages.length - 1]?.role === 'assistant';
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
+    <div className="flex h-screen h-[100dvh] overflow-hidden w-full" style={{ background: 'var(--bg-primary)' }}>
       <Toaster
         position="top-center"
         toastOptions={{
@@ -634,19 +634,6 @@ function App() {
           />
         ) : mode === 'room' ? (
           <div className="flex-1 flex flex-col min-h-0 relative">
-            <div className="md:hidden flex items-center justify-between p-3 border-b border-white/5 bg-slate-950/80 backdrop-blur-lg">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="p-2 rounded-xl text-gray-400 hover:text-white"
-              >
-                <Menu size={20} />
-              </button>
-              <span className="text-xs font-bold text-white flex items-center gap-1">
-                <Globe size={13} className="text-cyan-400" /> #{activeRoom.name}
-              </span>
-              <div className="w-8" />
-            </div>
-
             <RoomView
               room={activeRoom}
               messages={roomMessages}
@@ -660,7 +647,7 @@ function App() {
         ) : (
           <div className="flex-1 flex flex-col min-h-0 relative">
             <div
-              className="flex items-center gap-3 px-5 py-4 border-b flex-shrink-0"
+              className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4 border-b flex-shrink-0"
               style={{
                 background: 'rgba(10,10,15,0.85)',
                 backdropFilter: 'blur(20px)',
@@ -779,7 +766,7 @@ function App() {
               </div>
             )}
 
-            <div className="px-4 pb-5 pt-2 flex-shrink-0">
+            <div className="px-2 sm:px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 flex-shrink-0">
               {isListening && (
                 <div className="max-w-3xl mx-auto mb-2 flex items-center justify-between px-2 text-xs text-red-400 font-medium animate-pulse">
                   <div className="flex items-center gap-2">
@@ -795,7 +782,7 @@ function App() {
               )}
 
               <div
-                className="max-w-3xl mx-auto rounded-2xl p-3 flex items-end gap-3 input-container transition-all duration-300"
+                className="max-w-3xl mx-auto rounded-2xl p-2.5 sm:p-3 flex items-end gap-2 sm:gap-3 input-container transition-all duration-300"
                 style={{
                   background: 'var(--bg-elevated)',
                   border: isListening ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid var(--border-default)',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   SendHorizonal, Bot, Users, Globe, Smartphone, Palette, Cloud,
-  MessageSquare, Sparkles, ChevronDown, Hash, AlertCircle, Mic, MicOff, Volume2, VolumeX
+  MessageSquare, Sparkles, ChevronDown, Hash, AlertCircle, Mic, MicOff, Volume2, VolumeX, Menu
 } from 'lucide-react';
 import RoomMessageBubble from './RoomMessageBubble';
 import { useVoice } from '../hooks/useVoice';
@@ -131,27 +131,37 @@ const RoomView = ({
     <div className="flex flex-col h-full relative" style={{ background: 'var(--bg-primary)' }}>
       {/* Room Header */}
       <div
-        className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0 z-10"
+        className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b flex-shrink-0 z-10 gap-2"
         style={{
           background: 'rgba(15, 15, 26, 0.85)',
           backdropFilter: 'blur(20px)',
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {onOpenSidebar && (
+            <button
+              onClick={onOpenSidebar}
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white flex-shrink-0"
+              title="Open Navigation"
+            >
+              <Menu size={20} />
+            </button>
+          )}
+
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-lg"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0 shadow-lg"
             style={{
               background: `linear-gradient(135deg, ${room.color || '#7c3aed'}, #06b6d4)`,
             }}
           >
-            {getRoomIcon(room.icon, 20)}
+            {getRoomIcon(room.icon, 18)}
           </div>
 
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <h2 className="font-bold text-base text-white truncate flex items-center gap-1.5">
-                <Hash size={16} className="text-gray-400" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h2 className="font-bold text-sm sm:text-base text-white truncate flex items-center gap-1">
+                <Hash size={14} className="text-gray-400 flex-shrink-0" />
                 {room.name}
               </h2>
               <span
@@ -295,7 +305,7 @@ const RoomView = ({
       )}
 
       {/* Room Input Bar */}
-      <div className="p-4 md:p-6 pt-2 flex-shrink-0">
+      <div className="px-2 sm:px-4 md:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 flex-shrink-0">
         <div className="max-w-4xl mx-auto">
           {/* Ask AI Toggle Pill Bar */}
           <div className="flex items-center justify-between mb-2 px-1">
@@ -328,7 +338,7 @@ const RoomView = ({
 
           {/* Input Box */}
           <div
-            className={`rounded-2xl p-3 flex items-end gap-3 transition-all duration-300 ${
+            className={`rounded-2xl p-2.5 sm:p-3 flex items-end gap-2 sm:gap-3 transition-all duration-300 ${
               askAiMode
                 ? 'border-purple-500/50 shadow-lg shadow-purple-500/10'
                 : 'border-white/10 shadow-md'

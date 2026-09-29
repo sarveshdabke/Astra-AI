@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import {
   Code, Play, RotateCcw, Sparkles, Terminal, Copy, Check,
-  Download, Eye, ShieldCheck, Zap, AlertCircle, FileCode, SplitSquareVertical
+  Download, Eye, ShieldCheck, Zap, AlertCircle, FileCode, SplitSquareVertical, Menu
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -165,6 +165,7 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
   const [aiReview, setAiReview] = useState('');
   const [isReviewing, setIsReviewing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [mobileTab, setMobileTab] = useState('editor'); // 'editor' | 'output'
 
   const iframeRef = useRef(null);
 
@@ -255,9 +256,11 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
 
       iframeDoc.write(content);
       iframeDoc.close();
+      setMobileTab('output');
       toast.success('Code executed live!', { icon: '⚡' });
     } catch (err) {
       setOutputConsole((prev) => [...prev, { level: 'error', text: err.message }]);
+      setMobileTab('output');
       toast.error('Runtime execution error');
     } finally {
       setIsRunning(false);
@@ -286,6 +289,7 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
     try {
       setIsReviewing(true);
       setActiveTab('ai-review');
+      setMobileTab('output');
       const res = await axios.post(`${API}/api/ai/review-code`, {
         code,
         language,
@@ -313,23 +317,32 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
     <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Top Header */}
       <div
-        className="p-4 md:p-5 border-b flex-shrink-0 flex flex-wrap items-center justify-between gap-3"
+        className="p-3 sm:p-4 md:p-5 border-b flex-shrink-0 flex flex-wrap items-center justify-between gap-3"
         style={{
           background: 'rgba(15, 15, 26, 0.85)',
           backdropFilter: 'blur(20px)',
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          {onOpenSidebar && (
+            <button
+              onClick={onOpenSidebar}
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white flex-shrink-0"
+              title="Open Navigation"
+            >
+              <Menu size={20} />
+            </button>
+          )}
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 flex-shrink-0"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <Code size={18} />
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-white flex items-center gap-2">
-              In-Browser Code Playground & AI Reviewer
+          <div className="min-w-0">
+            <h1 className="text-sm sm:text-lg font-bold text-white flex items-center gap-2 truncate">
+              In-Browser Code Playground
             </h1>
             <p className="text-xs text-gray-400 hidden sm:block">
               Write, test, execute JS/HTML snippets live, and get instant senior-level AI code reviews.
@@ -358,26 +371,52 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-purple-300 bg-purple-500/15 border border-purple-500/30 hover:bg-purple-500/25 transition-all shadow-sm disabled:opacity-50"
           >
             <Sparkles size={13} />
-            {isReviewing ? 'Analyzing Code...' : '🤖 Review with AI'}
+            {isReviewing ? 'Analyzing...' : '🤖 Review AI'}
           </button>
 
           {/* Run Code Button */}
           <button
             onClick={runCode}
             disabled={isRunning}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-semibold text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl text-xs font-semibold text-white shadow-lg transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <Play size={13} fill="currentColor" />
-            Run Live
+            <span>Run Live</span>
           </button>
         </div>
+      </div>
+
+      {/* Mobile Switcher (Editor vs Output) */}
+      <div className="md:hidden flex items-center justify-center p-2 bg-black/50 border-b border-white/5 gap-2 flex-shrink-0">
+        <button
+          onClick={() => setMobileTab('editor')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mobileTab === 'editor'
+              ? 'bg-purple-600/30 text-purple-300 border border-purple-500/40 shadow-sm'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <FileCode size={13} />
+          <span>Editor</span>
+        </button>
+        <button
+          onClick={() => setMobileTab('output')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mobileTab === 'output'
+              ? 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 shadow-sm'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <Eye size={13} />
+          <span>Output & Review</span>
+        </button>
       </div>
 
       {/* Main Split Workspace */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-0">
         {/* LEFT COLUMN: Code Editor */}
-        <div className="flex-1 flex flex-col border-b md:border-b-0 md:border-r border-white/10 min-h-[300px] md:min-h-0">
+        <div className={`flex-1 flex flex-col border-b md:border-b-0 md:border-r border-white/10 ${mobileTab === 'editor' ? 'flex' : 'hidden md:flex'}`}>
           {/* Editor Sub-Header */}
           <div className="px-4 py-2.5 bg-black/40 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-semibold text-gray-400">
@@ -423,7 +462,7 @@ const CodePlayground = ({ initialCode, initialLanguage, onOpenSidebar }) => {
         </div>
 
         {/* RIGHT COLUMN: Output Sandbox Tabs (Preview / Console / AI Review) */}
-        <div className="flex-1 flex flex-col bg-[#0a0a10] min-h-[300px] md:min-h-0">
+        <div className={`flex-1 flex flex-col bg-[#0a0a10] ${mobileTab === 'output' ? 'flex' : 'hidden md:flex'}`}>
           {/* Tabs header */}
           <div className="px-4 py-2 bg-black/40 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-1.5">

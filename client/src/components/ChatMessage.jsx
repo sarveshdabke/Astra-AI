@@ -192,9 +192,9 @@ const ChatMessage = ({ message, userPicture, onSpeak, isSpeakingMessage, onSaveM
       </div>
 
       {/* Bubble + actions */}
-      <div className={`group flex flex-col gap-1 max-w-[88%] md:max-w-[72%] ${isUser ? 'items-end' : 'items-start'}`}>
+      <div className={`group flex flex-col gap-1 max-w-[94%] sm:max-w-[85%] md:max-w-[78%] lg:max-w-[72%] ${isUser ? 'items-end' : 'items-start'}`}>
         <div
-          className="relative px-5 py-3.5 rounded-[20px] shadow-sm"
+          className="relative px-3.5 sm:px-5 py-2.5 sm:py-3.5 rounded-[18px] sm:rounded-[20px] shadow-sm max-w-full overflow-hidden break-words"
           style={isUser ? {
             background: 'var(--gradient-user-bubble)',
             color: '#fff',
@@ -207,16 +207,16 @@ const ChatMessage = ({ message, userPicture, onSpeak, isSpeakingMessage, onSaveM
           }}
         >
           {isUser ? (
-            <p className="leading-relaxed whitespace-pre-wrap text-sm">{message.text}</p>
+            <p className="leading-relaxed whitespace-pre-wrap text-sm break-words">{message.text}</p>
           ) : (
-            <div className="prose prose-invert max-w-none text-sm">
+            <div className="prose prose-invert max-w-none text-sm break-words overflow-hidden">
               <MarkdownContent text={message.text} />
             </div>
           )}
         </div>
 
         {/* Timestamp + copy + speak + save to memory */}
-        <div className={`flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isUser ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-center gap-1.5 sm:gap-2 flex-wrap opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 ${isUser ? 'flex-row-reverse' : ''}`}>
           {timeString && (
             <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{timeString}</span>
           )}

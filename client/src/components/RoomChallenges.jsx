@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Trophy, Flame, CheckCircle, Clock, Play, Code, Sparkles,
-  Users, Award, ChevronRight, AlertCircle, RefreshCw, Send, Check
+  Users, Award, ChevronRight, AlertCircle, RefreshCw, Send, Check, Menu
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_URL as API } from '../config';
@@ -15,6 +15,7 @@ const RoomChallenges = ({ user, onOpenSidebar, onSelectRoom }) => {
   const [codeSolution, setCodeSolution] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [evalResult, setEvalResult] = useState(null);
+  const [mobileView, setMobileView] = useState('list'); // 'list' | 'editor'
 
   const fetchChallenges = async () => {
     try {
@@ -43,6 +44,7 @@ const RoomChallenges = ({ user, onOpenSidebar, onSelectRoom }) => {
     setActiveChallenge(c);
     setCodeSolution(c.starterCode || '');
     setEvalResult(null);
+    setMobileView('editor');
   };
 
   const handleSubmitSolution = async () => {
@@ -82,38 +84,73 @@ const RoomChallenges = ({ user, onOpenSidebar, onSelectRoom }) => {
     <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Top Header */}
       <div
-        className="p-5 md:p-6 border-b flex-shrink-0 flex items-center justify-between gap-4"
+        className="p-3 sm:p-5 md:p-6 border-b flex-shrink-0 flex items-center justify-between gap-3 sm:gap-4"
         style={{
           background: 'rgba(15, 15, 26, 0.85)',
           backdropFilter: 'blur(20px)',
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          {onOpenSidebar && (
+            <button
+              onClick={onOpenSidebar}
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white flex-shrink-0"
+              title="Open Navigation"
+            >
+              <Menu size={20} />
+            </button>
+          )}
           <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 flex-shrink-0"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <Trophy size={18} />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-white flex items-center gap-2">
-              Room Challenges & AI Hackathons
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-xl font-bold text-white flex items-center gap-2 truncate">
+              Room Challenges
+              <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 AI Judged
               </span>
             </h1>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 hidden sm:block">
               Solve live timed coding challenges in topic rooms and get evaluated automatically by the AI judge.
             </p>
           </div>
         </div>
       </div>
 
+      {/* Mobile View Switcher */}
+      <div className="md:hidden flex items-center justify-center p-2 bg-black/50 border-b border-white/5 gap-2 flex-shrink-0">
+        <button
+          onClick={() => setMobileView('list')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mobileView === 'list'
+              ? 'bg-purple-600/30 text-purple-300 border border-purple-500/40 shadow-sm'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <Trophy size={13} />
+          <span>Challenges ({challenges.length})</span>
+        </button>
+        <button
+          onClick={() => setMobileView('editor')}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            mobileView === 'editor'
+              ? 'bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 shadow-sm'
+              : 'text-gray-400 hover:text-white'
+          }`}
+        >
+          <Code size={13} />
+          <span>Workspace</span>
+        </button>
+      </div>
+
       {/* Main Split Layout */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-0">
         {/* Left List of Challenges */}
-        <div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 overflow-y-auto p-4 space-y-2.5 bg-black/20 flex-shrink-0">
+        <div className={`w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 overflow-y-auto p-3 sm:p-4 space-y-2.5 bg-black/20 flex-shrink-0 ${mobileView === 'list' ? 'block' : 'hidden md:block'}`}>
           <div className="flex items-center justify-between px-1 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
               Active Challenges
@@ -170,7 +207,7 @@ const RoomChallenges = ({ user, onOpenSidebar, onSelectRoom }) => {
 
         {/* Right Editor & AI Evaluation Workspace */}
         {activeChallenge ? (
-          <div className="flex-1 flex flex-col overflow-hidden min-h-0 bg-[#0a0a12]">
+          <div className={`flex-1 flex flex-col overflow-hidden min-h-0 bg-[#0a0a12] ${mobileView === 'editor' ? 'flex' : 'hidden md:flex'}`}>
             {/* Header info */}
             <div className="p-4 bg-white/[0.02] border-b border-white/10 flex flex-wrap items-center justify-between gap-3">
               <div>

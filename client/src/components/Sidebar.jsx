@@ -229,10 +229,10 @@ const Sidebar = ({
   };
 
   /* ─ Sidebar body ─ */
-  const SidebarContent = () => (
+  const renderSidebarContent = () => (
     <div
-      className="flex flex-col h-full select-none"
-      style={{ background: 'var(--bg-secondary)', width: '290px' }}
+      className="flex flex-col h-full select-none w-[280px] sm:w-[290px] max-w-[85vw]"
+      style={{ background: 'var(--bg-secondary)' }}
     >
       {/* App Branding */}
       <div className="p-4 pb-3 border-b border-white/5">
@@ -296,7 +296,7 @@ const Sidebar = ({
         {/* Developer Tooling / USP Modes */}
         <div className="space-y-1 pt-1 border-t border-white/5">
           <button
-            onClick={() => onSelectMode('prompts')}
+            onClick={() => { onSelectMode('prompts'); onClose(); }}
             className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === 'prompts'
                 ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold'
@@ -308,7 +308,7 @@ const Sidebar = ({
           </button>
 
           <button
-            onClick={() => onSelectMode('memory')}
+            onClick={() => { onSelectMode('memory'); onClose(); }}
             className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === 'memory'
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold'
@@ -320,7 +320,7 @@ const Sidebar = ({
           </button>
 
           <button
-            onClick={() => onSelectMode('playground')}
+            onClick={() => { onSelectMode('playground'); onClose(); }}
             className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === 'playground'
                 ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold'
@@ -332,7 +332,7 @@ const Sidebar = ({
           </button>
 
           <button
-            onClick={() => onSelectMode('roadmaps')}
+            onClick={() => { onSelectMode('roadmaps'); onClose(); }}
             className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === 'roadmaps'
                 ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold'
@@ -344,7 +344,7 @@ const Sidebar = ({
           </button>
 
           <button
-            onClick={() => onSelectMode('challenges')}
+            onClick={() => { onSelectMode('challenges'); onClose(); }}
             className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === 'challenges'
                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold'
@@ -478,8 +478,8 @@ const Sidebar = ({
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden md:flex h-full border-r border-white/5">
-        <SidebarContent />
+      <div className="hidden md:flex h-full border-r border-white/5 flex-shrink-0">
+        {renderSidebarContent()}
       </div>
 
       {/* Mobile drawer */}
@@ -487,10 +487,10 @@ const Sidebar = ({
         <>
           <div className="sidebar-overlay md:hidden" onClick={onClose} />
           <div
-            className="fixed left-0 top-0 h-full z-50 md:hidden"
+            className="fixed left-0 top-0 h-full h-[100dvh] z-50 md:hidden"
             style={{ animation: 'slide-in-left 0.25s ease forwards' }}
           >
-            <SidebarContent />
+            {renderSidebarContent()}
           </div>
         </>
       )}

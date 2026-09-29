@@ -1,4 +1,48 @@
-# Logs
+# ==============================================================================
+# Astra AI — Git Ignore Rules (.gitignore)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
+node_modules/
+client/node_modules/
+server/node_modules/
+.pnp
+.pnp.js
+
+# ------------------------------------------------------------------------------
+# Production Builds & Bundler Outputs
+# ------------------------------------------------------------------------------
+dist/
+dist-ssr/
+client/dist/
+build/
+out/
+.vite/
+client/.vite/
+*.local
+
+# ------------------------------------------------------------------------------
+# Environment Variables, Secrets & Credentials
+# (CRITICAL: Never commit secrets to version control)
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+
+# Allow tracking example environment templates
+!.env.example
+!client/.env.example
+!server/.env.example
+
+# ------------------------------------------------------------------------------
+# Logs & Diagnostic Dumps
+# ------------------------------------------------------------------------------
 logs
 *.log
 npm-debug.log*
@@ -7,24 +51,39 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ------------------------------------------------------------------------------
+# Testing & Code Coverage
+# ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+*.lcov
 
-# Environment variables & secrets
-.env
-.env.*
-!.env.example
-
-# IDE & system
-.kilo
+# ------------------------------------------------------------------------------
+# IDEs, Editors & System Artifacts
+# ------------------------------------------------------------------------------
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.sublime-project
+*.sublime-workspace
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# Agentic / AI scratch caches
+.kilo/
+.agents/scratch/

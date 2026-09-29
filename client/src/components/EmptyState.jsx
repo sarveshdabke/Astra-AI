@@ -42,13 +42,13 @@ const suggestions = [
 
 const EmptyState = ({ onSelectPrompt, userName }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-full px-6 pb-8"
+    <div className="flex flex-col items-center justify-center h-full px-3 sm:px-6 pb-6 sm:pb-8 max-w-full"
       style={{ animation: 'fade-in 0.5s ease forwards' }}>
 
       {/* Logo glow */}
-      <div className="mb-6 relative">
+      <div className="mb-4 sm:mb-6 relative">
         <div
-          className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black logo-glow"
+          className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-black logo-glow"
           style={{ background: 'var(--gradient-brand)' }}
         >
           A
@@ -56,21 +56,21 @@ const EmptyState = ({ onSelectPrompt, userName }) => {
       </div>
 
       {/* Greeting */}
-      <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center"
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1.5 sm:mb-2 text-center"
         style={{ color: 'var(--text-primary)' }}>
         Hello, {userName || 'there'}!
       </h2>
-      <p className="mb-8 text-center" style={{ color: 'var(--text-secondary)' }}>
+      <p className="mb-5 sm:mb-8 text-xs sm:text-sm text-center" style={{ color: 'var(--text-secondary)' }}>
         Ask me anything — I'm here to help.
       </p>
 
       {/* Suggestions grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full max-w-3xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 w-full max-w-3xl">
         {suggestions.map((s, i) => (
           <button
             key={i}
             onClick={() => onSelectPrompt(s.prompt)}
-            className="text-left p-4 rounded-2xl transition-all group"
+            className="text-left p-3 sm:p-4 rounded-xl sm:rounded-2xl transition-all group"
             style={{
               background: 'var(--bg-elevated)',
               border: '1px solid var(--border-default)',

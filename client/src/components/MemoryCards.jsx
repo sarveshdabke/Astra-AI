@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Brain, Sparkles, Trash2, Plus, RefreshCw, Tag, Check,
-  ShieldCheck, Zap, Info, Search, X, Layers, Lightbulb
+  ShieldCheck, Zap, Info, Search, X, Layers, Lightbulb, Menu
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_URL as API } from '../config';
@@ -149,52 +149,59 @@ const MemoryCards = ({ user, onOpenSidebar }) => {
     <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Top Header */}
       <div
-        className="p-5 md:p-6 border-b flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+        className="p-3 sm:p-5 md:p-6 border-b flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4"
         style={{
           background: 'rgba(15, 15, 26, 0.85)',
           backdropFilter: 'blur(20px)',
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div>
-          <div className="flex items-center gap-2">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20"
-              style={{ background: 'var(--gradient-brand)' }}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {onOpenSidebar && (
+            <button
+              onClick={onOpenSidebar}
+              className="md:hidden p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-white flex-shrink-0"
+              title="Open Navigation"
             >
-              <Brain size={18} />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                Contextual AI Memory Cards
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                  {cards.length} Active Memories
-                </span>
-              </h1>
-              <p className="text-xs text-gray-400">
-                Astra AI references these memory cards automatically to personalize all answers & code.
-              </p>
-            </div>
+              <Menu size={20} />
+            </button>
+          )}
+          <div
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-white shadow-lg shadow-purple-500/20 flex-shrink-0"
+            style={{ background: 'var(--gradient-brand)' }}
+          >
+            <Brain size={18} />
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-xl font-bold text-white flex items-center gap-2 truncate">
+              AI Memory Cards
+              <span className="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                {cards.length}
+              </span>
+            </h1>
+            <p className="text-xs text-gray-400 hidden sm:block">
+              Astra AI references these memory cards automatically to personalize all answers & code.
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setShowExtractModal(true)}
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 transition-all duration-200"
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 transition-all duration-200"
             title="Auto extract from past conversations"
           >
             <Sparkles size={14} />
-            AI Auto-Extract
+            <span>AI Auto-Extract</span>
           </button>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+            className="flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs text-white shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <Plus size={15} />
-            Add Memory
+            <span>Add Memory</span>
           </button>
         </div>
       </div>
